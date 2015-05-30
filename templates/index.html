@@ -5,34 +5,37 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title> Gold Sniper </title>
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="style.css">
+	<link href= "{{ url_for('static',filename='styles/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
 </head>
 <body>
 	<h1> Gold Sniper</h1>
+	<img src="http://vignette2.wikia.nocookie.net/crossfirefps/images/f/fd/Sniper_AWM-Gold.png/revision/20140630052342" alt="Sniper" height="45" width="131" style="margin-left: 42%">
 
 	<form method="post" action="{{ url_for('submit') }}">
 		<div class="input-group-lg">
-  			<span class="input-group-addon" id="basic-addon1">@</span>
-  			<input type="text" name="username" class="form-control" placeholder="GOLD Username" aria-describedby="basic-addon1">
+  			<span class="input-group-addon" id="basic-addon1">GOLD Username</span>
+  			<input type="text" name="username" class="form-control" placeholder="johnsmellski" aria-describedby="basic-addon1">
 		</div>
 		<div class="input-group-lg">
- 			<span class="input-group-addon" id="basic-addon1">$</span>
-  			<input type="password" name = "password" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
+ 			<span class="input-group-addon" id="basic-addon1">GOLD Password</span>
+  			<input type="password" name = "password" class="form-control" placeholder="********" aria-describedby="basic-addon1">
 		</div>
-
-			<label for="quarter">Desired quarter:</label>
-			<select class="form-control" name="quarter">
+		<div class="input-group-lg">
+  			<span class="input-group-addon" id="basic-addon1">Desired Quarter</span>
+  	</div>
+			<select class="form-control" name="quarter" style="width: 60%">
 				<option value="summer15">Summer 2015</option>
 				<option value="fall15">Fall 2015</option>
 			</select>
 		<div class="input-group-lg">
-  			<span class="input-group-addon" id="basic-addon1">@</span>
-  			<input type="text" name="enroll_code" class="form-control" placeholder="Course Enrollment Code" aria-describedby="basic-addon1">
+  			<span class="input-group-addon" id="basic-addon1">Enrollment Code</span>
+  			<input type="text" name="enroll_code" class="form-control" placeholder="58677" aria-describedby="basic-addon1">
 		</div>
 		<div class="input-group-lg">
-  			<span class="input-group-addon" id="basic-addon1">@</span>
-  			<input type="text" name="passtime" class="form-control" placeholder="Pass-Time (mm/dd/yy HH:MM" aria-describedby="basic-addon1">
+  			<span class="input-group-addon" id="basic-addon1">Pass Time</span>
+  			<input type="text" name="passtime" class="form-control" placeholder="mm/dd/yy HH:MM" aria-describedby="basic-addon1">
 		</div>
 
 		<button class="btn btn-default btn-lg" type="submit">Submit</button>
