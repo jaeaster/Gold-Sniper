@@ -1,0 +1,23 @@
+h1 {
+	text-align:center;
+	color:#FFD700;
+}
+
+div{
+	margin-left:20%;
+	margin-right:20%;
+}
+
+select{
+	margin-left: 20%;
+	margin-right: 20%;
+}
+
+option {
+	margin-left: 20%;
+	margin-right: 20%;
+}
+
+form {
+	text-align: center;
+}
