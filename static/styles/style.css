@@ -3,22 +3,20 @@ h1 {
 	color:#000000;
 }
 
-div{
-	margin-left:20%;
-	margin-right:20%;
-}
-
-select{
-	margin-left: 20%;
-	margin-right: 20%;
-}
-
-option {
-	margin-left: 20%;
-	margin-right: 20%;
-}
-
 form {
-	text-align: center;
+	text-align: left;
+	margin-left: 20%;
+	margin-right: 20%;
+}
+
+input, textarea, select{
+  border: 1px solid #bbb;
+  width: 100%;
+  margin-bottom: 15px;
+  @include box_sizing;
+}
+
+input {
+  height: auto !important;
 }
 

@@ -11,30 +11,30 @@
 </head>
 <body>
 	<h1> Gold Sniper</h1>
-	<img src="http://vignette2.wikia.nocookie.net/crossfirefps/images/f/fd/Sniper_AWM-Gold.png/revision/20140630052342" alt="Sniper" height="45" width="131" style="margin-left: 42%">
+	<center><img src="http://vignette2.wikia.nocookie.net/crossfirefps/images/f/fd/Sniper_AWM-Gold.png/revision/20140630052342" alt="Sniper" height="45" width="131"></center>
 
 	<form method="post" action="{{ url_for('submit') }}">
 		<div class="input-group-lg">
-  			<span class="input-group-addon" id="basic-addon1">GOLD Username</span>
+  			<label for="username">GOLD Username</label>
   			<input type="text" name="username" class="form-control" placeholder="johnsmellski" aria-describedby="basic-addon1">
 		</div>
 		<div class="input-group-lg">
- 			<span class="input-group-addon" id="basic-addon1">GOLD Password</span>
+ 				<label for="password">GOLD Password</label>
   			<input type="password" name = "password" class="form-control" placeholder="********" aria-describedby="basic-addon1">
 		</div>
+		<div>
+			<label for="quarter">Desired Quarter</label>
+				<select class="form-control" name="quarter">
+					<option value="summer15">Summer 2015</option>
+					<option value="fall15">Fall 2015</option>
+				</select>
+		</div>
 		<div class="input-group-lg">
-  			<span class="input-group-addon" id="basic-addon1">Desired Quarter</span>
-  	</div>
-			<select class="form-control" name="quarter" style="width: 60%">
-				<option value="summer15">Summer 2015</option>
-				<option value="fall15">Fall 2015</option>
-			</select>
-		<div class="input-group-lg">
-  			<span class="input-group-addon" id="basic-addon1">Enrollment Code</span>
+  			<label for="enroll_code">Enrollment Code</label>
   			<input type="text" name="enroll_code" class="form-control" placeholder="58677" aria-describedby="basic-addon1">
 		</div>
 		<div class="input-group-lg">
-  			<span class="input-group-addon" id="basic-addon1">Pass Time</span>
+  			<label for="passtime">Pass Time</label>
   			<input type="text" name="passtime" class="form-control" placeholder="mm/dd/yy HH:MM" aria-describedby="basic-addon1">
 		</div>
 
