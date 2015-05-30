@@ -1,30 +1,44 @@
-import requests
-import os
+from flask import Flask, render_template, request, url_for
+from GoldSniper import *
+import getpass
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+	return render_template('index.html')
 
 
-from django.shortcuts import render
-from django.http import HttpResponse
+@app.route('/submit/', methods=['POST'])
+def submit():
+	username=request.form['username']
+	password=request.form['password']
+	quarter=request.form['quarter']
+	enroll_code=request.form['enroll_code']
+	sniper = GoldSniper()
+	sniper.goldSniper(username,password,quarter,enroll_code)
+	return render_template('index.html')
 
-from .models import Greeting
-
-# Create your views here.
-def index(request):
-	  template = loader.get_template("goldsniper/index.html")
-    return HttpResponse(template.render())
-
-def submit(request):
-	if request.mehtod == 'POST':
-		import app.py
-    
+if __name__ == '__main__':
+	app.run(debug=True)    
 
 
 
-# def db(request):
 
-#     greeting = Greeting()
-#     greeting.save()
+#other shit that was in app.py:
+"""username = str(raw_input("Please enter GOLD username: "))
+password = getpass.getpass("Please enter your password: ")
 
-#     greetings = Greeting.objects.all()
+username = "vonmeier"
+password = "C871d97d"
+quarter = "20154"
+enroll_code = "58677"
+sniper = GoldSniper()
+sniper.login(username,password)
+#sniper.listLinks()
+sniper.setQuarter("20154") #Fall
+sniper.snipeCourse("58677")
 
-#     return render(request, 'db.html', {'greetings': greetings})
 
+#enroll_code = 58677
+"""
