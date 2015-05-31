@@ -6,9 +6,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 #from apscheduler.jobstores.mongodb import MongoDBJobStore
 #from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
-from datetime import datetime
-import time
-import os
+
 
 
 jobstores = {
@@ -26,8 +24,9 @@ job_defaults = {
 
 #instantiate scheduler with config options as the arguments
 #scheduler = BackgroundScheduler("""jobstores=jobstores""", executors=executors, job_defaults=job_defaults, timezone=utc)
-scheduler=BackgroundScheduler()
+scheduler = BackgroundScheduler()
 scheduler.start()
+
 #Create sniper instance
 sniper = GoldSniper()
 
@@ -46,7 +45,7 @@ def submit():
 	password = request.form['password']
 	quarter = request.form['quarter']
 	enroll_code = request.form['enroll_code']
-	pass_time = request.form['passtime']
+	pass_time = request.form['passtime'] #MM/DD/YY HH:MM, 2009-05-30 HH:MM:SS
 	pass_time_arg = '20' + pass_time[6:8] + '-' + pass_time[0:2] + '-' + pass_time[3:5] + ' ' + pass_time[9:] + ':00'
 	scheduler.add_job(sniper.goldSniper, 'date', run_date=pass_time_arg, args=[username,password,quarter,enroll_code])
 	return render_template('index.html')
