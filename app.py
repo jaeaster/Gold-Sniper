@@ -32,7 +32,7 @@ logging.basicConfig()
 
 #instantiate scheduler with config options as the arguments
 #scheduler = BackgroundScheduler("""jobstores=jobstores""", executors=executors, job_defaults=job_defaults, timezone=utc)
-scheduler = BackgroundScheduler(jobstores=jobstores, timezone = timezone('US/Pacific'))
+scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone = timezone('US/Pacific'))
 scheduler.start()
 
 #create web app instance
