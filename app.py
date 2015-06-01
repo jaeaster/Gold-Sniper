@@ -26,6 +26,10 @@ job_defaults = {
 	'max_instances': 3
 }
 
+#fix for error: No handlers could be found for logger "apscheduler.executors.default"
+import logging
+logging.basicConfig()
+
 #instantiate scheduler with config options as the arguments
 #scheduler = BackgroundScheduler("""jobstores=jobstores""", executors=executors, job_defaults=job_defaults, timezone=utc)
 scheduler = BackgroundScheduler(jobstores=jobstores)
