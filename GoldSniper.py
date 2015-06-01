@@ -2,72 +2,83 @@ import requests
 from lxml import html
 import mechanize
 
+# Define a FakeLink class to use for javascript-based links
+# mechanize cannot handle javascript links so this class
+# is a work around for that issue
 class FakeLink(object):
 	def __init__(self,url):
 		self.absolute_url = url
 
-class GoldSniper(object):
+# opens the url in a given instance of a mechanize.Browser() object
+def openPage(url,browser): #Opens the page of the current URL
+	browser.open(url) # May need to save in variable or return the value
 
-	def __init__(self): #initializes url, concert, and browser data
-		self.url = "https://my.sa.ucsb.edu/gold/Login.aspx"
-		self.browser = mechanize.Browser()
-		self.browser.set_handle_robots(False)
+# lists forms on the currently opened page in a browser instance
+def listForms(browser):
+	for form in browser.forms():
+		print "Form name: ", form.name
+		print form
 
-	def resetURL(self, url): #Changes the URL attribute to given parameter
-		self.url = url
+# lists links on the currently opened page in a browser instance
+def listLinks(browser): #lists all the links on the current url
+	for link in browser.links():
+		print link.text, link.url
 
-	def openPage(self): #Opens the page of the current URL
-		self.browser.open(self.url) # May need to save in variable or return the value
+# lists controls for a given form on the currently 
+# opened page in a browser instance
+def listControls(formName,browser):
+	browser.select_form(formName)
+	for control in browser.form.controls:
+		print control
+		print "type=%s, name=%s, value=%s" % (control.type, control.name, browser[control.name])
 
-	def listForms(self): #lists all of the forms on the current url
-		for form in self.browser.forms():
-			print "Form name: ", form.name
-			print form
+# Logs into Gold with given username and password
+def login(username, password):
+	browser = mechanize.Browser()
+	browser.set_handle_robots(False)
+	gold_url = "https://my.sa.ucsb.edu/gold/Login.aspx"
 
-	def listLinks(self): #lists all the links on the current url
-		for link in self.browser.links():
-			print link.text, link.url
+	openPage(gold_url, browser)
+	browser.select_form(nr=0)
+	browser["ctl00$pageContent$userNameText"] = username
+	browser["ctl00$pageContent$passwordText"] = password
+	response = browser.submit()
+	return browser
 
-	def listControls(self,formName): #Lists all of the controls for a given form
-		self.browser.select_form(formName)
-		for control in self.browser.form.controls:
-			print control
-			print "type=%s, name=%s, value=%s" % (control.type, control.name, self.browser[control.name])
+# Navigates to Schedule page and changes quarter to given quarter
+def setQuarter(quarter, browser):
+	browser.follow_link(FakeLink("https://my.sa.ucsb.edu/gold/StudentSchedule.aspx"))
+	browser.select_form(nr=0)
+	browser["ctl00$pageContent$quarterDropDown"] = ["20154",] #Need to un-hardcode this
+	response = browser.submit()
+	return browser
 
-	def login(self, username, password): #logs in to stubhub.com account
-		self.openPage()
-		self.browser.select_form(nr=0)
-		self.browser["ctl00$pageContent$userNameText"] = username
-		self.browser["ctl00$pageContent$passwordText"] = password
-		response = self.browser.submit()
+# Enrolls in a course given the enrollment code for the course
+def snipeCourse(enroll_code,browser):
+	browser.select_form(nr=0)
+	browser["ctl00$pageContent$EnrollCodeTextBox"] = enroll_code
+	forms = browser.forms()
+	i = 0
+	for form in forms:
+		request = form.click(name="ctl00$pageContent$AddCourseButton")
+		response = browser.open(request)
 
-	def setQuarter(self, quarter):
-		self.browser.follow_link(FakeLink("https://my.sa.ucsb.edu/gold/StudentSchedule.aspx"))
-		self.browser.select_form(nr=0)
-		self.browser["ctl00$pageContent$quarterDropDown"] = ["20154",]
-		response = self.browser.submit()
-		#ctl00$pageContent$quarterDropDown
+	browser.select_form(nr=0)
+	forms = browser.forms()
+	for form in forms:
+		request = form.click(name="ctl00$pageContent$AddToScheduleButton")
+		response = browser.open(request)
+	return browser
 
-	def snipeCourse(self,enroll_code):
-		self.browser.select_form(nr=0)
-		self.browser["ctl00$pageContent$EnrollCodeTextBox"] = enroll_code
-		forms = self.browser.forms()
-		i = 0
-		for form in forms:
-			request = form.click(name="ctl00$pageContent$AddCourseButton")
-			response = self.browser.open(request)
+# Logs out of the currently logged in account
+def logout(browser):
+	browser.follow_link(FakeLink("https://my.sa.ucsb.edu/gold/Logout.aspx"))
 
-		self.browser.select_form(nr=0)
-		forms = self.browser.forms()
-		for form in forms:
-			request = form.click(name="ctl00$pageContent$AddToScheduleButton")
-			response = self.browser.open(request)
-
-	def logout(self):
-		self.browser.follow_link(FakeLink("https://my.sa.ucsb.edu/gold/Logout.aspx"))
-
-	def goldSniper(self,username,password,quarter,enroll_code):
-		self.login(username,password)
-		self.setQuarter(quarter)
-		self.snipeCourse(enroll_code)
-		self.logout()
+# Wraps all of the above functions into one function
+# This functions logs in, then sets the quarter, then snipes the course,
+# and finally logs out.
+def goldSniper(username,password,quarter,enroll_code):
+	browser = login(username,password)
+	browser = setQuarter(quarter,browser)
+	browser = snipeCourse(enroll_code,browser)
+	logout(browser)
