@@ -15,7 +15,7 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 
 jobstores = {
 	#'mongo': MongoDBJobStore()
-	'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')
+	'default': SQLAlchemyJobStore(url='sqlite:///app.db')
 }
 
 executors = {
@@ -29,7 +29,7 @@ job_defaults = {
 
 #instantiate scheduler with config options as the arguments
 #scheduler = BackgroundScheduler("""jobstores=jobstores""", executors=executors, job_defaults=job_defaults, timezone=utc)
-scheduler = BackgroundScheduler()
+scheduler = BackgroundScheduler(jobstores=jobstores)
 scheduler.start()
 
 #Create sniper instance
