@@ -5,7 +5,7 @@ from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from GoldSniper import *
 import getpass
-from pytz import utc #UTC is timezone for scheduler 
+from pytz import timezone #UTC is timezone for scheduler 
 from apscheduler.schedulers.background import BackgroundScheduler
 #from apscheduler.jobstores.mongodb import MongoDBJobStore
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
@@ -32,7 +32,7 @@ logging.basicConfig()
 
 #instantiate scheduler with config options as the arguments
 #scheduler = BackgroundScheduler("""jobstores=jobstores""", executors=executors, job_defaults=job_defaults, timezone=utc)
-scheduler = BackgroundScheduler(jobstores=jobstores)
+scheduler = BackgroundScheduler(jobstores=jobstores, timezone = timezone('US/Pacific'))
 scheduler.start()
 
 #create web app instance
