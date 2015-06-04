@@ -49,7 +49,10 @@ def login(username, password):
 def setQuarter(quarter, browser):
 	browser.follow_link(FakeLink("https://my.sa.ucsb.edu/gold/StudentSchedule.aspx"))
 	browser.select_form(nr=0)
-	browser["ctl00$pageContent$quarterDropDown"] = ["20154",] #Need to un-hardcode this
+	drop_down_list = list(quarter)
+	drop_down_list.append("")
+	browser["ctl00$pageContent$quarterDropDown"] = drop_down_list
+	#browser["ctl00$pageContent$quarterDropDown"] = ["20154",] #Need to un-hardcode this
 	response = browser.submit()
 	return browser
 

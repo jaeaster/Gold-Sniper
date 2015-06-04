@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en-us">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title> Gold Sniper </title>
-	<link href= "{{ url_for('static',filename='styles/bootstrap.min.css') }}" rel="stylesheet">
-	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+{% extends "layout.html" %}
 
-</head>
-<body>
+{% block content %}
 	<h1> GOLD Sniper</h1>
 	<center><img src="http://vignette2.wikia.nocookie.net/crossfirefps/images/f/fd/Sniper_AWM-Gold.png/revision/20140630052342" alt="Sniper" height="45" width="131"></center>
 
@@ -25,8 +16,8 @@
 		<div>
 			<label for="quarter">Desired Quarter</label>
 				<select class="form-control" name="quarter">
-					<option value="summer15">Summer 2015</option>
-					<option value="fall15">Fall 2015</option>
+					<option value="20153">Summer 2015</option>
+					<option value="20154">Fall 2015</option>
 				</select>
 		</div>
 		<div class="input-group-lg">
@@ -45,6 +36,4 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-
-</body>
-</html>
+{% endblock %}

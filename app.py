@@ -5,12 +5,12 @@ from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from GoldSniper import *
 import getpass
-from pytz import timezone #UTC is timezone for scheduler 
+from pytz import timezone
 from apscheduler.schedulers.background import BackgroundScheduler
-#from apscheduler.jobstores.mongodb import MongoDBJobStore
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
-
+#create web app instance
+app = Flask(__name__)
 
 jobstores = {
 	#'mongo': MongoDBJobStore()
@@ -34,9 +34,6 @@ logging.basicConfig()
 #scheduler = BackgroundScheduler("""jobstores=jobstores""", executors=executors, job_defaults=job_defaults, timezone=utc)
 scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone = timezone('US/Pacific'))
 scheduler.start()
-
-#create web app instance
-app = Flask(__name__)
 
 #DATABASE  vvv
 #got instructions for creating db from: https://github.com/miguelgrinberg/Flask-Migrate
@@ -63,7 +60,7 @@ class User(db.Model):
 #routes index.html to the root of the web server
 @app.route('/')
 def index():
-	return render_template('index.html')
+	return render_template('index.html', title='Home')
 
 #Calls submit function when some makes a POST request
 @app.route('/submit/', methods=['POST'])
@@ -75,14 +72,10 @@ def submit():
 	pass_time = request.form['passtime'] #MM/DD/YY HH:MM -> 2009-05-30 HH:MM:SS
 	pass_time_arg = '20' + pass_time[6:8] + '-' + pass_time[0:2] + '-' + pass_time[3:5] + ' ' + pass_time[9:] + ':00'
 	scheduler.add_job(goldSniper, 'date', run_date=pass_time_arg, args=[username,password,quarter,enroll_code])
-	return render_template('index.html')
+	return render_template('index.html', title="Success")
 
 if __name__ == '__main__':
 	# Bind to PORT if defined, otherwise default to 5000.
 	port = int(os.environ.get('PORT', 5000))
 	app.run(host='0.0.0.0', port=port, debug=True)
-	manager.run()   
-
-
-
-
+	manager.run()

@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{% for snipe in snipes %}
+<div><p> {{ snipe.name }} : {{ snipe.time }}</p></div>
+{% endfor %}
+
+{% endblock %}
