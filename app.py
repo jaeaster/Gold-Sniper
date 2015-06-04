@@ -12,8 +12,11 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 #create web app instance
 app = Flask(__name__)
 
+#Looks to config.py for config options
+app.config.from_object('config')
+
+# The following dictionaries configure the BackgroundScheduler instance
 jobstores = {
-	#'mongo': MongoDBJobStore()
 	'default': SQLAlchemyJobStore(url='sqlite:///app.db')
 }
 
@@ -31,21 +34,21 @@ import logging
 logging.basicConfig()
 
 #instantiate scheduler with config options as the arguments
-#scheduler = BackgroundScheduler("""jobstores=jobstores""", executors=executors, job_defaults=job_defaults, timezone=utc)
 scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone = timezone('US/Pacific'))
 scheduler.start()
 
-#DATABASE  vvv
+#DATABASE 
 #got instructions for creating db from: https://github.com/miguelgrinberg/Flask-Migrate
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 
 # create SQLAlchemy database instance
 db = SQLAlchemy(app)
+
 #create Migrate instance
 migrate = Migrate(app, db)
+
 #create Manager instance
 #can now do migrations in terminal with -> python app.py db migrate
-
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
@@ -62,7 +65,7 @@ class User(db.Model):
 def index():
 	return render_template('index.html', title='Home')
 
-#Calls submit function when some makes a POST request
+#Calls submit function when someone makes a POST request
 @app.route('/submit/', methods=['POST'])
 def submit():
 	username = request.form['username']
@@ -74,8 +77,11 @@ def submit():
 	scheduler.add_job(goldSniper, 'date', run_date=pass_time_arg, args=[username,password,quarter,enroll_code])
 	return render_template('index.html', title="Success")
 
+# Basically, if we are using app.py as the main module
+# i.e. If we execute 'python app.py'
 if __name__ == '__main__':
-	# Bind to PORT if defined, otherwise default to 5000.
+	# Bind to PORT if defined, otherwise default to 5000
+
 	port = int(os.environ.get('PORT', 5000))
 	app.run(host='0.0.0.0', port=port, debug=True)
 	manager.run()
